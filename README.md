@@ -26,15 +26,25 @@ The UAV leverages algorithms like A* and Greedy Best-First Search (GBFS) to calc
    - Inherits from `Point` to represent 2D vectors.
    - Adds functionality for normalization and magnitude calculation.
 
-3. **PathStrategy (Interface)**
+3. **Node**
+   - Represents a node in the A* pathfinding algorithm.
+   - Contains the following properties:
+     - **position:** Point representing the node's location in 2D space
+     - **angle:**  indicating the direction of movement
+     - **gCost:** representing the cost from start node to current node
+     - **hCost:** representing the estimated cost from current node to goal
+     - **fCost:** representing total cost (gCost + hCost)
+     - **parent:** Pointer to the parent Node for path reconstruction
+
+4. **PathStrategy (Interface)**
    - Abstract interface for pathfinding strategies.
    - Allows the use of different algorithms for path calculation.
      
-4. **GraphStrategy**
+5. **GraphStrategy**
    - Implements pathfinding logic (PathStrategy Interface) using A* and GBFS algorithms.
    - Defines private helper methods for heuristic calculations, neighbor generation, and path reconstruction.
 
-5. **UAV**
+6. **UAV**
    - Represents a UAV navigating in 2D space.
    - Encapsulates key properties:
      - **Position:** Current location in 2D space.
@@ -42,9 +52,10 @@ The UAV leverages algorithms like A* and Greedy Best-First Search (GBFS) to calc
      - **Movement Constraints:** Includes maximum rotation angle and fixed step size.
    - Delegates path calculation to a configurable `PathStrategy`, enabling flexibility in choosing algorithms.
 
-6. **IFlight (Interface)**
+7. **IFlight (Interface)**
    - Defines UAV-related properties for path calculation.
    - Ensures a standardized interface for interacting with pathfinding algorithms.
+
 
 ## Prerequisites
 - **Compiler:** Requires a C++ compiler and Python interpreter for the simulation view.
