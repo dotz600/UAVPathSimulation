@@ -120,9 +120,13 @@ def draw_points_from_file(file_path):
                              repeat=True)
 
         plt.tight_layout()
-        plt.show()
+        # Save the plot instead of displaying it
+        plt.savefig(os.path.join(project_dir, 'resources', 'path_visualization.png'))
+        plt.close()
+        print(f"Plot saved to {os.path.join(project_dir, 'resources', 'path_visualization.png')}")
     else:
         print("No valid points found in the file.")
+
 
 
 
@@ -164,7 +168,7 @@ def draw_points_from_file1(file_path):
 
 
 # Define the paths
-cpp_program = os.path.join(project_dir, "x64", "Debug", "UAVPathSimulation.exe")
+cpp_program = os.path.join(project_dir, "build", "uav_simulation")
 output_file = os.path.join(project_dir, "resources", "pathOutput.txt")
 
 # Run the C++ program
@@ -182,3 +186,4 @@ except subprocess.CalledProcessError as e:
 
 # Draw the points from the output file
 draw_points_from_file(output_file)
+print("Simulation completed successfully!")
