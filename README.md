@@ -83,59 +83,6 @@ g++ -std=c++17 -o uav_simulation src/*.cpp
 
 ## Building and Running the Project
 
-### Prerequisites
-- C++ compiler with C++17 support
-- CMake (version 3.10 or higher)
-- Python 3.x
-- pip (Python package manager)
-- Docker (optional, for containerized deployment)
-
-### Python Dependencies
-```bash
-pip install matplotlib numpy
-```
-
-### Building Locally
-
-1. Create a build directory and navigate to it:
-```bash
-mkdir build
-cd build
-```
-
-2. Generate build files with CMake:
-```bash
-cmake ..
-```
-
-3. Build the project:
-```bash
-make
-```
-
-4. Run the simulation:
-```bash
-cd ..  # Return to project root
-python3 pathPrinter.py
-```
-
-The simulation will generate two outputs:
-- `resources/pathOutput.txt`: Contains the calculated path coordinates
-- `resources/path_visualization.png`: Visual representation of the UAV's path
-
-### Running with Docker
-
-1. Build the Docker image:
-```bash
-docker build -t uav-simulation .
-```
-
-2. Run the simulation in a container:
-```bash
-docker run -v $(pwd)/resources:/app/resources uav-simulation
-```
-
-This will mount your local resources directory to the container and save the output files there.
 
 ## Usage
 1. **Initialize a UAV:**
