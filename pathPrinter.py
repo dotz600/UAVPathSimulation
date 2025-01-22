@@ -116,59 +116,19 @@ def draw_points_from_file(file_path):
         anim = FuncAnimation(fig,
                              update,
                              frames=len(points),
-                             interval=150,  # 50ms between frames
+                             interval=150,  # 150ms between frames
                              repeat=True)
 
         plt.tight_layout()
-        # Save the plot instead of displaying it
-        plt.savefig(os.path.join(project_dir, 'resources', 'path_visualization.png'))
-        plt.close()
-        print(f"Plot saved to {os.path.join(project_dir, 'resources', 'path_visualization.png')}")
-    else:
-        print("No valid points found in the file.")
-
-
-
-
-def draw_points_from_file1(file_path):
-    """
-    Reads points from a file and plots them on an x, y space.
-
-    Args:
-        file_path (str): Path to the file containing points.
-    """
-    points = []
-
-    # Read points from the file
-    with open(file_path, 'r') as file:
-        for line in file:
-            try:
-                # Remove parentheses and split by comma
-                line = line.strip().replace("(", "").replace(")", "")
-                x, y = map(float, line.split(','))
-                points.append((x, y))
-            except ValueError:
-                print(f"Skipping invalid line: {line.strip()}")
-
-    if points:
-        x_cords, y_cords = zip(*points)
-
-        plt.figure(figsize=(6, 6))
-        plt.plot(x_cords, y_cords, marker='o', linestyle='-', color='blue', label='Path')
-        plt.scatter(x_cords, y_cords, color='red', label='Points')
-        plt.title("Path Orbit Visualization")
-        plt.xlabel("X-axis")
-        plt.ylabel("Y-axis")
-        plt.grid(True)
-        plt.legend()
-        plt.axis('equal')  # Ensure equal scaling on both axes
         plt.show()
     else:
         print("No valid points found in the file.")
 
 
-# Define the paths
-cpp_program = os.path.join(project_dir, "build", "uav_simulation")
+
+
+
+cpp_program = os.path.join(project_dir, "x64", "Debug", "UAVPathSimulation")
 output_file = os.path.join(project_dir, "resources", "pathOutput.txt")
 
 # Run the C++ program
@@ -186,4 +146,3 @@ except subprocess.CalledProcessError as e:
 
 # Draw the points from the output file
 draw_points_from_file(output_file)
-print("Simulation completed successfully!")
