@@ -140,6 +140,12 @@ output_file = os.path.join(project_dir, "resources", "pathOutput.txt")
 # Run the C++ program
 try:
     start_time = time.time()
+    for path in possible_path:
+        if os.path.exists(path):
+            exe_path = path
+            break
+
+    result = subprocess.run([exe_path], check=True, cwd=project_dir)
     end_time = time.time()
     elapsed_time = end_time - start_time
     print("C++ program executed successfully. " )
