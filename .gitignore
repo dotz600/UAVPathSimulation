@@ -368,3 +368,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /.idea
 /build
+/UAVPathSimulation .vcxproj
+/UAVPathSimulation .vcxproj.filters
