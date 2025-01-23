@@ -66,22 +66,31 @@ The UAV leverages algorithms like A* and Greedy Best-First Search (GBFS) to calc
 ## Getting Started
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
-cd <repository-folder>
+git clone [<repository-url>](https://github.com/dotz600/UAVPathSimulation.git)
+cd UAVPathSimulation
 ```
 
 ### 2. Build the Project
-Use your preferred build system (e.g., `cmake` or a simple `Makefile`). Below is an example for g++:
+Use your preferred build system (e.g., `cmake` or a simple `Makefile`). Below is an example for cmake:
 ```bash
-g++ -std=c++17 -o uav_simulation src/*.cpp
+mkdir build
+cd build
+cmake ..
+cmake --build .
 ```
 
 ### 3. Run the Simulation
+Install Python dependencies
 ```bash
-./uav_simulation
+pip install -r requirements.txt
 ```
 
-## Building and Running the Project
+Run simulation:
+```bash
+python pathPrinter.py
+```
+### 4. Experiment with Input Data
+Modify the data in the /resources/inputData directory to test different pathfinding options and scenarios. This allows you to explore the behavior of the A* and GBFS algorithms under various conditions.
 
 
 ## Usage
