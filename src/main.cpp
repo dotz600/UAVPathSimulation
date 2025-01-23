@@ -4,6 +4,7 @@
 #include "../include/GraphStrategy.h"
 using namespace std;
 
+
 struct InputData {
     Point position;
     Point target;

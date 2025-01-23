@@ -1,3 +1,5 @@
+from os.path import exists
+
 import matplotlib.pyplot as plt
 import subprocess
 import time
@@ -116,7 +118,7 @@ def draw_points_from_file(file_path):
         anim = FuncAnimation(fig,
                              update,
                              frames=len(points),
-                             interval=150,  # 50ms between frames
+                             interval=150,  # 150ms between frames
                              repeat=True)
 
         plt.tight_layout()
@@ -126,51 +128,23 @@ def draw_points_from_file(file_path):
 
 
 
-def draw_points_from_file1(file_path):
-    """
-    Reads points from a file and plots them on an x, y space.
-
-    Args:
-        file_path (str): Path to the file containing points.
-    """
-    points = []
-
-    # Read points from the file
-    with open(file_path, 'r') as file:
-        for line in file:
-            try:
-                # Remove parentheses and split by comma
-                line = line.strip().replace("(", "").replace(")", "")
-                x, y = map(float, line.split(','))
-                points.append((x, y))
-            except ValueError:
-                print(f"Skipping invalid line: {line.strip()}")
-
-    if points:
-        x_cords, y_cords = zip(*points)
-
-        plt.figure(figsize=(6, 6))
-        plt.plot(x_cords, y_cords, marker='o', linestyle='-', color='blue', label='Path')
-        plt.scatter(x_cords, y_cords, color='red', label='Points')
-        plt.title("Path Orbit Visualization")
-        plt.xlabel("X-axis")
-        plt.ylabel("Y-axis")
-        plt.grid(True)
-        plt.legend()
-        plt.axis('equal')  # Ensure equal scaling on both axes
-        plt.show()
-    else:
-        print("No valid points found in the file.")
-
 
 # Define the paths
-cpp_program = os.path.join(project_dir, "x64", "Debug", "UAVPathSimulation.exe")
+
+possible_path = [os.path.join(project_dir, "x64", "Debug", "UAVPathSimulation.exe")
+    ,os.path.join(project_dir, "build", "Debug", "UAVPathSimulation.exe")]
+
+
 output_file = os.path.join(project_dir, "resources", "pathOutput.txt")
 
 # Run the C++ program
 try:
     start_time = time.time()
-    result = subprocess.run([cpp_program], check=True, cwd=project_dir)
+    for path in possible_path:
+        if os.path.exists(path):
+            exe_path = path
+
+    result = subprocess.run([exe_path], check=True, cwd=project_dir)
     end_time = time.time()
     elapsed_time = end_time - start_time
     print("C++ program executed successfully. " )
