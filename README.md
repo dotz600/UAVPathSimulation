@@ -66,7 +66,7 @@ The UAV leverages algorithms like A* and Greedy Best-First Search (GBFS) to calc
 ## Getting Started
 ### 1. Clone the Repository
 ```bash
-git clone [<repository-url>](https://github.com/dotz600/UAVPathSimulation.git)
+git clone https://github.com/dotz600/UAVPathSimulation.git
 cd UAVPathSimulation
 ```
 
