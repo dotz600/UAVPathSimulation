@@ -1,6 +1,8 @@
 #pragma once
 #include "../include/GraphStrategy.h"
 #include <functional>
+#include <cmath>
+#include <limits>
 
 /// <summary>
 /// override hash function for Point, Vector and Node

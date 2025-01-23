@@ -6,7 +6,6 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-
 const float DEGREE = 360.0;
 
 #pragma region Path Calculation
@@ -30,7 +29,7 @@ std::vector<Point> GraphStrategy::calculate(const IFlight* context, const Point&
 	std::unordered_map<GraphStrategy::Node, bool> visitedNodes;
 	//track the nodes that have been popped
 	std::vector<Node*> popsNode;
-	
+
 	//define the start node
 	Node* cur = new Node(position, curAngel, 0, position.distance(destination));
 	queue.push(cur);
@@ -42,7 +41,7 @@ std::vector<Point> GraphStrategy::calculate(const IFlight* context, const Point&
 		queue.pop();
 		popsNode.push_back(cur);
 		visitedNodes[*cur] = false;
-		
+
 		// Goal check
 		if (cur->position.distance(destination) < stepSize) {
 			double targetAngle = angleToTarget(cur->position, destination);

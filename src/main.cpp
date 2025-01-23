@@ -17,6 +17,8 @@ InputData readInputData(const char* filename);
 void writePath(const char* filename, const std::vector<Point>& path);
 
 
+
+
 int main() {
     try {
         constexpr const char* inputFile = "resources/inputData.txt";

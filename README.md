@@ -1,0 +1,123 @@
+# UAV Pathfinding Simulation
+
+## Overview
+This project uses advanced pathfinding algorithms to simulate a UAV (Unmanned Aerial Vehicle) navigating in a 2D space. The core functionality is built around modular, object-oriented design principles, allowing flexible configuration and extension.
+
+The UAV leverages algorithms like A* and Greedy Best-First Search (GBFS) to calculate optimal or near-optimal paths to a given destination, considering movement constraints such as angle limits and step sizes. The system is designed to be efficient, maintainable, and easily extensible for future enhancements.
+
+![UAV Pathfinding Demo](./images/pathfinding-demo.gif)
+![UAV Pathfinding Demo1](./images/pathfinding-demo1.gif)
+
+## Features
+- **Pathfinding Algorithms:** Implements A* and GBFS algorithms for efficient path calculations.
+- **Customizable Path Strategy:** Modular design allows easy swapping of pathfinding strategies.
+- **2D Space Navigation:** Supports UAV movement simulation with configurable step size and rotation constraints.
+- **Reusable Components:** Includes generic utilities.
+- **Comprehensive Error Handling:** Handles invalid states gracefully to prevent crashes.
+- **Real-time visualization of UAV movement:** Introduce a Python script to execute the C++ program and simulate the UAV's path in a graphical view.
+
+## Architecture
+![UAV Class Diagram](./images/uav-diagram.png)
+
+### Key Classes
+1. **Point**
+   - Represents a point in 2D space.
+   - Provides basic operations like addition, subtraction, and scalar multiplication.
+   - Calculates the distance between points.
+
+2. **Vector**
+   - Inherits from `Point` to represent 2D vectors.
+   - Adds functionality for normalization and magnitude calculation.
+
+3. **Node**
+   - Represents a node in the A* pathfinding algorithm.
+   - Contains the following properties:
+     - **position:** Point representing the node's location in 2D space
+     - **angle:**  indicating the direction of movement
+     - **gCost:** representing the cost from start node to current node
+     - **hCost:** representing the estimated cost from current node to goal
+     - **fCost:** representing total cost (gCost + hCost)
+     - **parent:** Pointer to the parent Node for path reconstruction
+
+4. **PathStrategy (Interface)**
+   - Abstract interface for pathfinding strategies.
+   - Allows the use of different algorithms for path calculation.
+     
+5. **GraphStrategy**
+   - Implements pathfinding logic (PathStrategy Interface) using A* and GBFS algorithms.
+   - Defines private helper methods for heuristic calculations, neighbor generation, and path reconstruction.
+
+6. **UAV**
+   - Represents a UAV navigating in 2D space.
+   - Encapsulates key properties:
+     - **Position:** Current location in 2D space.
+     - **Angle:** Current direction of movement.
+     - **Movement Constraints:** Includes maximum rotation angle and fixed step size.
+   - Delegates path calculation to a configurable `PathStrategy`, enabling flexibility in choosing algorithms.
+
+7. **IFlight (Interface)**
+   - Defines UAV-related properties for path calculation.
+   - Ensures a standardized interface for interacting with pathfinding algorithms.
+
+
+## Prerequisites
+- **Compiler:** Requires a C++ compiler and Python interpreter for the simulation view.
+
+## Getting Started
+### 1. Clone the Repository
+```bash
+git clone https://github.com/dotz600/UAVPathSimulation.git
+cd UAVPathSimulation
+```
+
+### 2. Build the Project
+Use your preferred build system (e.g., `cmake` or a simple `Makefile`). Below is an example for cmake:
+```bash
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+
+### 3. Run the Simulation
+Install Python dependencies
+```bash
+pip install -r requirements.txt
+```
+
+Run simulation:
+```bash
+python pathPrinter.py
+```
+### 4. Experiment with Input Data
+Modify the data in the /resources/inputData directory to test different pathfinding options and scenarios. This allows you to explore the behavior of the A* and GBFS algorithms under various conditions.
+
+
+## Usage
+1. **Initialize a UAV:**
+   In the /resources/inputData.txt file, change the start point, destination point, current angle, max rotate angle, and step size and save the file.
+   
+2. **Simulate Movement:**
+   Run to view the result.
+   ```bash
+   py /pathPrinter.py
+   ```
+
+## Example Output
+The Python script executes the cpp program that calculates the path and then simulates the path according to /pathOutput.txt as the UAV's calculated path, displayed as a series of points, e.g.:
+```
+Calculated Path:
+(0,0)
+(1,1)
+(2,2)
+...
+(10,10)
+```
+
+## Extensibility
+1. **Add New Pathfinding Algorithms:**
+   - Derive a new class from `PathStrategy`.
+   - Implement the `calculate` method to define custom logic.
+
+2. **Enhance UAV Behavior:**
+   - Extend the `UAV` class to include additional capabilities like obstacle avoidance or 3D movement.
