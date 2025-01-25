@@ -1,47 +1,26 @@
-# Use Ubuntu as base image
-FROM ubuntu:22.04
+# Use an official Python image as a base
+FROM python:3.9
 
-# Prevent interactive prompts during package installation
-ENV DEBIAN_FRONTEND=noninteractive
+# Set the working directory
+WORKDIR /app
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
-    python3 \
-    python3-pip \
-    git \
+    x11-apps \
     python3-tk \
+    nano \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
-WORKDIR /app
 
-# Copy the project files
+# Copy the entire project into the container
 COPY . .
 
 # Install Python dependencies
-RUN pip3 install matplotlib numpy
+RUN pip install -r requirements.txt
 
-# Add missing includes for math functions
-RUN for file in src/*.cpp; do \
-    if [ -f "$file" ]; then \
-        echo '#include <cmath>' > /tmp/includes && \
-        echo '#include <limits>' >> /tmp/includes && \
-        cat /tmp/includes "$file" > /tmp/temp && \
-        mv /tmp/temp "$file"; \
-    fi \
-done
+# Create a build directory and compile the C++ code
+RUN mkdir build && cd build && cmake .. && cmake --build .
 
-# Create build directory and build the C++ project
-RUN mkdir -p build && \
-    cd build && \
-    cmake .. && \
-    make && \
-    chmod +x uav_simulation
-
-# Set matplotlib to use a non-interactive backend
-ENV MPLBACKEND=Agg
-
-# Set the entry point to the Python script
-CMD ["python3", "pathPrinter.py"]
+# Set the command to run your Python script
+CMD ["python", "pathPrinter.py"]

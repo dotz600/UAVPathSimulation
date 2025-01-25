@@ -1,6 +1,7 @@
-#include "../include/GraphStrategy.h"
+#include <algorithm>
 #include <queue>
 #include <unordered_map>
+#include "../include/GraphStrategy.h"
 #include "../include/HashFunctions.h"
 
 #ifndef M_PI

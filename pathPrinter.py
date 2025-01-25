@@ -1,27 +1,34 @@
-from os.path import exists
-
-import matplotlib.pyplot as plt
+import matplotlib
 import subprocess
 import time
 import os
-import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-
 import numpy as np
+import matplotlib.pyplot as plt
+import platform
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 project_dir = os.path.dirname(os.path.abspath(__file__))
 
 
+
+def in_docker():
+    """Check if the script is running inside a Docker container."""
+    if platform.system() == 'Linux':
+        return os.path.exists('/.dockerenv') or \
+               any('docker' in line for line in open('/proc/1/cgroup', 'rt').readlines())
+    return False  # Not running in Docker if not on Linux
+
+
 def draw_points_from_file(file_path):
     """
-    Reads points from a file and creates an animated plot with improved styling.
+    Reads points from a file and creates an animated plot with styling.
 
     Args:
         file_path (str): Path to the file containing points.
     """
     points = []
-
+    
     # Read points from the file
     with open(file_path, 'r') as file:
         for line in file:
@@ -114,32 +121,53 @@ def draw_points_from_file(file_path):
             ax.set_xlim(min(x_cords) - margin, max(x_cords) + margin)
             ax.set_ylim(min(y_cords) - margin, max(y_cords) + margin)
 
-        # Create animation
+        global anim
         anim = FuncAnimation(fig,
                              update,
                              frames=len(points),
-                             interval=150,  # 150ms between frames
+                             interval=150,
                              repeat=True)
 
         plt.tight_layout()
-        plt.show()
+
+        if in_docker():
+            # Save the animation as a GIF
+            anim.save('/app/animation.gif', writer='imagemagick')
+            print("Animation saved as GIF.")
+        else:
+            # Display the animation
+            plt.show()
+        
     else:
         print("No valid points found in the file.")
 
 
 
 
+# Set the appropriate backend
+if in_docker():
+    matplotlib.use('Agg')  # Use a non-interactive backend in Docker
+else:
+    matplotlib.use('TkAgg')
+
 # Define the paths
+possible_path = [os.path.join(project_dir, "x64", "Debug", "UAVPathSimulation.exe") #VS exe path
+    ,os.path.join(project_dir, "build", "Debug", "UAVPathSimulation.exe"),  # cmake exe path
+    os.path.join(project_dir, "build", "bin", "UAVPathSimulation")] # docker exe path
 
-possible_path = [os.path.join(project_dir, "x64", "Debug", "UAVPathSimulation.exe")
-    ,os.path.join(project_dir, "build", "Debug", "UAVPathSimulation.exe")]
 
-
-output_file = os.path.join(project_dir, "resources", "pathOutput.txt")
+cpp_path_output = os.path.join(project_dir, "resources", "pathOutput.txt")
 
 # Run the C++ program
 try:
     start_time = time.time()
+    exe_path = None
+    for path in possible_path:
+        if os.path.exists(path):
+            exe_path = path
+            break
+
+    result = subprocess.run([exe_path], check=True, cwd=project_dir)
     end_time = time.time()
     elapsed_time = end_time - start_time
     print("C++ program executed successfully. " )
@@ -150,4 +178,4 @@ except subprocess.CalledProcessError as e:
     exit(1)
 
 # Draw the points from the output file
-draw_points_from_file(output_file)
+draw_points_from_file(cpp_path_output)

@@ -15,3 +15,8 @@ file(GLOB SOURCES "src/*.cpp")
 
 # Create the executable
 add_executable(UAVPathSimulation ${SOURCES})
+
+# Specify the output directory for the executable
+set_target_properties(UAVPathSimulation PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)

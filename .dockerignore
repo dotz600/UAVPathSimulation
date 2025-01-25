@@ -6,3 +6,4 @@ build/
 *.out
 __pycache__/
 *.pyc
+/images

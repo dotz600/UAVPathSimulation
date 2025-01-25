@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 #include <ostream>
 #include <istream>
 using namespace std;
