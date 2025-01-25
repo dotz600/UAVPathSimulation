@@ -178,4 +178,4 @@ except subprocess.CalledProcessError as e:
     exit(1)
 
 # Draw the points from the output file
-draw_points_from_file(cpp_path_output)
+draw_points_from_file(output_file)
