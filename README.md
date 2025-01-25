@@ -64,6 +64,13 @@ The UAV leverages algorithms like A* and Greedy Best-First Search (GBFS) to calc
 - **Compiler:** Requires a C++ compiler and Python interpreter for the simulation view.
 
 ## Getting Started
+
+This project consists of a **C++ program** that calculates the UAV path using the A* and GBFS algorithms and a **Python script** that:
+1. Executes the compiled C++ executable to calculate the UAV's path.
+2. Visualizes the calculated path as an animated simulation.
+
+If you are using Visual Studio or another IDE, you can simply build the C++ project, ensure the executable is generated, and then run the Python script. Alternatively, follow the provided steps to build the project using `cmake` or Docker.
+
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/dotz600/UAVPathSimulation.git
@@ -71,7 +78,8 @@ cd UAVPathSimulation
 ```
 
 ### 2. Build the Project
-Use your preferred build system (e.g., `cmake` or a simple `Makefile`). Below is an example for cmake:
+
+#### Option 1: CMake Build
 ```bash
 mkdir build
 cd build
@@ -79,32 +87,56 @@ cmake ..
 cmake --build .
 ```
 
-### 3. Run the Simulation
-Install Python dependencies
+#### Option 2: Docker Build
+```bash
+# Build Docker image
+docker build -t uav-path-simulation .
+
+# Run Docker container
+docker run uav-path-simulation
+
+# Copy generated animation to local machine
+docker ps -a  # Find container ID
+docker cp <container_id>:/app/animation.gif <local_destination>
+# Example: docker cp ec165d7cb0b9:/app/animation.gif C:\Users\USER\Downloads\animation.gif
+```
+
+### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
+Note: When using Docker, all dependencies are pre-installed, so you can skip this step.
 
-Run simulation:
+### 4. Run the Simulation
 ```bash
 python pathPrinter.py
 ```
-### 4. Experiment with Input Data
-Modify the data in the /resources/inputData directory to test different pathfinding options and scenarios. This allows you to explore the behavior of the A* and GBFS algorithms under various conditions.
-
 
 ## Usage
-1. **Initialize a UAV:**
-   In the /resources/inputData.txt file, change the start point, destination point, current angle, max rotate angle, and step size and save the file.
-   
-2. **Simulate Movement:**
-   Run to view the result.
-   ```bash
-   py /pathPrinter.py
-   ```
+
+### Customizing UAV Parameters
+1. Edit `/resources/inputData.txt` to modify:
+   - Start point
+   - Destination point
+   - Current angle - The UAV's initial orientation in degrees (0 corresponds to the X-axis).
+   - Maximum rotate angle
+   - Step size
+
+### Editing Input Data in Docker
+If using Docker:
+```bash
+# Enter container
+docker run -it uav-path-simulation /bin/bash
+
+# Edit input file
+nano /app/resources/inputData.txt
+
+# Run simulation
+python ./pathPrinter.py
+```
 
 ## Example Output
-The Python script executes the cpp program that calculates the path and then simulates the path according to /pathOutput.txt as the UAV's calculated path, displayed as a series of points, e.g.:
+The simulation generates a path visualization with coordinates:
 ```
 Calculated Path:
 (0,0)
@@ -114,6 +146,10 @@ Calculated Path:
 (10,10)
 ```
 
+
+---
+
+
 ## Extensibility
 1. **Add New Pathfinding Algorithms:**
    - Derive a new class from `PathStrategy`.
@@ -121,3 +157,5 @@ Calculated Path:
 
 2. **Enhance UAV Behavior:**
    - Extend the `UAV` class to include additional capabilities like obstacle avoidance or 3D movement.
+  
+
