@@ -7,3 +7,7 @@ build/
 __pycache__/
 *.pyc
 /images
+/build
+/x64
+/debug
+/.idea
