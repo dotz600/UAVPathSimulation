@@ -5,8 +5,10 @@ This project uses advanced pathfinding algorithms to simulate a UAV (Unmanned Ae
 
 The UAV leverages algorithms like A* and Greedy Best-First Search (GBFS) to calculate optimal or near-optimal paths to a given destination, considering movement constraints such as angle limits and step sizes. The system is designed to be efficient, maintainable, and easily extensible for future enhancements.
 
-![UAV Pathfinding Demo](./images/pathfinding-demo.gif)
-![UAV Pathfinding Demo1](./images/pathfinding-demo1.gif)
+![UAV Pathfinding Demo1](./images/animation4.gif)
+![UAV Pathfinding Demo1](./images/animation3.gif)
+![UAV Pathfinding Demo1](./images/animation.gif)
+![UAV Pathfinding Demo](./images/animation2.gif)
 
 ## Features
 - **Pathfinding Algorithms:** Implements A* and GBFS algorithms for efficient path calculations.
