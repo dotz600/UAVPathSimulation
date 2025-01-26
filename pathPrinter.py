@@ -152,7 +152,7 @@ else:
 
 # Define the paths
 possible_path = [os.path.join(project_dir, "x64", "Debug", "UAVPathSimulation.exe") #VS exe path
-    ,os.path.join(project_dir, "build", "Debug", "UAVPathSimulation.exe"),  # cmake exe path
+    ,os.path.join(project_dir, "build", "bin", "Debug", "UAVPathSimulation.exe"),  # cmake exe path
     os.path.join(project_dir, "build", "bin", "UAVPathSimulation")] # docker exe path
 
 
