@@ -1,5 +1,14 @@
 # UAV Pathfinding Simulation
 
+## Table of Contents
+- [Overview](#overview)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Technical Implementation](#technical-implementation)
+- [Getting Started](#getting-started)
+- [Usage Guide](#usage)
+- [Extensibility](#extensibility)
+
 ## Overview
 This project uses advanced pathfinding algorithms to simulate a UAV (Unmanned Aerial Vehicle) navigating in a 2D space. The core functionality is built around modular, object-oriented design principles, allowing flexible configuration and extension.
 
@@ -62,6 +71,44 @@ The UAV leverages algorithms like A* and Greedy Best-First Search (GBFS) to calc
    - Ensures a standardized interface for interacting with pathfinding algorithms.
 
 
+## Technical Implementation
+
+### Pathfinding Heuristics
+The A* algorithm combines the cost to reach a node (`g(n)`) and an estimated cost to reach the target (`h(n)`) to determine the best path. In this project, two heuristics are implemented to guide the pathfinding process, ensuring both efficient navigation and smooth movement for UAVs:
+
+#### 1. **Euclidean Distance**
+The Euclidean distance calculates the straight-line distance between the current node and the target node. This is defined as:
+
+\[
+h_{euclidean}(n) = \sqrt{(x_{target} - x_{current})^2 + (y_{target} - y_{current})^2}
+\]
+
+- **Purpose**: This heuristic accurately measures the direct distance to the goal.
+- **Usage**: It ensures the UAV efficiently approaches the target by prioritizing the shortest path geometrically.
+
+#### 2. **Distance with Angle Gap**
+This heuristic augments the Euclidean distance by incorporating the angular difference between the UAV's current direction and the direction required to move towards the target. It is defined as:
+
+\[
+h_{angle}(n) = h_{euclidean}(n) + w \cdot \Delta \theta
+\]
+
+Where:
+- \( \Delta \theta \): The angular difference between the UAV's current direction and the direction towards the target.
+- \( w \): A weight factor prioritizes minimizing angular changes.
+
+- **Purpose**: 
+  - Encourages smoother UAV paths by penalizing sharp turns.
+  - Enables faster adjustment towards an optimal trajectory when the UAV needs to temporarily move away from the target to close the angular gap more efficiently.
+  - Helps avoid getting stuck in local optima by considering both distance and orientation.
+
+#### Why Two Heuristics?
+- The **Euclidean Distance** ensures the UAV approaches the target efficiently and directly.
+- The **Distance with Angle Gap** balances the need for smooth turning with the ability to prioritize gap closing, even if it means temporarily moving farther from the target.
+
+The project allows switching between different heuristic functions to experiment with path calculation performance and behavior.
+
+
 ## Prerequisites
 - **Compiler:** Requires a C++ compiler and Python interpreter for the simulation view.
 
@@ -69,7 +116,7 @@ The UAV leverages algorithms like A* and Greedy Best-First Search (GBFS) to calc
 
 This project consists of a **C++ program** that calculates the UAV path using the A* and GBFS algorithms and a **Python script** that:
 1. Executes the compiled C++ executable to calculate the UAV's path.
-2. Visualizes the calculated path as an animated simulation.
+2. Visualize the calculated path as an animated simulation.
 
 If you are using Visual Studio or another IDE, you can simply build the C++ project, ensure the executable is generated, and then run the Python script. Alternatively, follow the provided steps to build the project using `cmake` or Docker.
 
