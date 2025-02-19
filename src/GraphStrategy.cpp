@@ -4,10 +4,12 @@
 #include "../include/GraphStrategy.h"
 #include "../include/HashFunctions.h"
 
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
 const float DEGREE = 360.0;
+const int NEIGHBORS_NUM = 3;
 
 #pragma region Path Calculation
 /// <summary>
@@ -42,7 +44,7 @@ std::vector<Point> GraphStrategy::calculate(const IFlight* context, const Point&
 		queue.pop();
 		popsNode.push_back(cur);
 		visitedNodes[*cur] = false;
-
+		
 		// Goal check
 		if (cur->position.distance(destination) < stepSize) {
 			double targetAngle = angleToTarget(cur->position, destination);
@@ -115,6 +117,7 @@ void GraphStrategy::cleanupNodes(std::priority_queue<GraphStrategy::Node*, std::
 #pragma region Node Generation
 /// <summary>
 /// generate the neighbors of the current node
+/// save only the minimal NEIGHBORS_NUM node and return only them 
 /// </summary>
 /// <param name="q1"></param>
 /// <param name="maxAngle"></param>
@@ -124,10 +127,25 @@ void GraphStrategy::cleanupNodes(std::priority_queue<GraphStrategy::Node*, std::
 /// <returns>std::vector<Node*> </returns>
 std::vector<GraphStrategy::Node*> GraphStrategy::generateNeighbors(float maxAngle, Node* cur, float stepSize, const Point& destination) const {
 	std::vector<Node*> res;
-	int maxAngInt = (int)maxAngle;
+	std::priority_queue<Node*, std::vector<Node*>,
+		std::function<bool(const Node*, const Node*)>> maxHeap(
+			[](const Node* a, const Node* b) { return a->hCost < b->hCost; }
+		);
+
+	int maxAngInt = static_cast<int>(maxAngle);
 	for (int i = -maxAngInt; i <= maxAngInt; i++) {
 		Node* nd = createNeighbor(i, maxAngle, cur, stepSize, destination);
-		res.push_back(nd);
+		maxHeap.push(nd);
+
+		if (maxHeap.size() > NEIGHBORS_NUM) {
+			delete maxHeap.top();
+			maxHeap.pop();
+		}
+	}
+
+	while (!maxHeap.empty()) {
+		res.push_back(maxHeap.top());
+		maxHeap.pop();
 	}
 	return res;
 }
@@ -246,12 +264,14 @@ Point GraphStrategy::moveInDirection(const Point& pos, float angle, float stepSi
 
 #pragma region Node Implementation
 GraphStrategy::Node::Node(Point pos, float dir, double g, double h, Node* par)
-	: position(pos), angle(dir), gCost(g), hCost(h), fCost(g + h), parent(par) {}
+	: position(pos), angle(dir), gCost(g), hCost(h), fCost(g + h), parent(par) {
+}
 
 GraphStrategy::Node::Node(Point pos, float dir, double h)
 	: position(pos), angle(dir), gCost(std::numeric_limits<double>::max()),
 	hCost(h), fCost(std::numeric_limits<double>::max()),
-	parent(nullptr) {}
+	parent(nullptr) {
+}
 
 
 bool GraphStrategy::Node::operator==(const Node& other) const {
