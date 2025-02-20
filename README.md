@@ -158,7 +158,7 @@ Note: When using Docker, all dependencies are pre-installed, so you can skip thi
 
 ### 4. Run the Simulation
 ```bash
-python pathPrinter.py
+python main.py
 ```
 
 ## Usage
@@ -181,7 +181,7 @@ docker run -it uav-path-simulation /bin/bash
 nano /app/resources/inputData.txt
 
 # Run simulation
-python ./pathPrinter.py
+python ./main.py
 ```
 
 ## Example Output
