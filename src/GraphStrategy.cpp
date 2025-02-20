@@ -103,9 +103,8 @@ std::vector<Point> GraphStrategy::reconstructPath(Node* cur, Point target) const
 /// <param name="popsNode"></param>
 void GraphStrategy::cleanupNodes(std::priority_queue<GraphStrategy::Node*, std::vector<GraphStrategy::Node*>, GraphStrategy::NodePtrCompare>& openSet, std::vector<GraphStrategy::Node*>& popsNode) const {
 	while (!openSet.empty()) {
-		auto nd = openSet.top();
+		delete openSet.top();
 		openSet.pop();
-		delete nd;
 	}
 	for (Node* nd : popsNode) {
 		delete nd;
